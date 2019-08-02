@@ -92,7 +92,7 @@
            cxt:'',
            minute:"00",
            second:"30",
-           startSecond:"29",
+           startSecond:"6",
            countDown:'',
            finallysecond:5,
            speedDisabled:false,
@@ -169,12 +169,12 @@
 		                 cxt.closePath();
 		                 cxt.fill();
 		                 
-		                 var grd=cxt.createRadialGradient(Point.X, Point.Y, this.R-23 ,Point.X, Point.Y,this.R );
+		                 var grd=cxt.createRadialGradient(Point.X, Point.Y, this.R-20 ,Point.X, Point.Y,this.R+10 );
                  		 grd.addColorStop(0,this.pointColor);
 						 grd.addColorStop(.4,"white");
                      	 cxt.fillStyle = grd;
 	                     cxt.beginPath();
-	                     cxt.arc(Point.X, Point.Y, this.R-16 , 0, Math.PI * 2, true);
+	                     cxt.arc(Point.X, Point.Y, this.R-5 , 0, Math.PI * 2, true);
 	                     cxt.closePath();
 	                     cxt.fill();
                      }
