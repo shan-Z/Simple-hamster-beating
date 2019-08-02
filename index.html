@@ -44,8 +44,7 @@
  <body>
 	<div id="app" class="page">
 		 
-      	<router-view v-if="isRouterAlive">
-		<h3>模拟打地鼠游戏</h3>		
+      	<router-view v-if="isRouterAlive">	
       		<div class="time-box">
 	        	<span>{{minute}}</span>:<span>{{second}}</span>
 	        </div>
@@ -55,6 +54,7 @@
 	      	></canvas>
 	      	 <div class="page-actions">
 	      	 	
+		<h3>模拟打地鼠游戏</h3>	
 				 <div class="btns-box">操作：
 				     <van-button type="warning" @click="stopTimer">停止</van-button>
 				     <van-button type="info" @click="actionTimer">{{startText}}</van-button>
@@ -70,6 +70,8 @@
 				     <!--<van-button type="danger" @click="clearCount" :disabled='speedDisabled'>重来</van-button>-->
 				 </div>
 	      	 </div>
+		
+		<h3>模拟打地鼠游戏</h3>	
       	</router-view>
 		 
 	</div>
