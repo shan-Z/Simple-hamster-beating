@@ -28,9 +28,12 @@
          	text-align: center;
          	font-size: 30px;
          }
+         .btns-box:nth-child(1){
+         	margin-top:-20px;
+         }
          .btns-box{
          	text-align: center;
-         	margin-top:20px;
+         	margin-bottom:20px;
          }
          .van-button{
          	width:100px;
@@ -41,30 +44,33 @@
  <body>
 	<div id="app" class="page">
 		 
-      	<div class="time-box">
-        	<span>{{minute}}</span>:<span>{{second}}</span>
-        </div>
-		 <canvas class="myCanvas"  ref="myCanvas"  
-		 	@touchstart="canvasStart($event)"
-      		@touchend="canvasEnd($event)"
-      	></canvas>
-      	 <div class="page-actions">
-      	 	
-			 <div class="btns-box">操作：
-			     <van-button type="warning" @click="stopTimer">停止</van-button>
-			     <van-button type="info" @click="actionTimer">开始</van-button>
-			 </div>
-	      	
-			 <div class="btns-box">速度：
-			 	<van-button type="default" @click="addTime" :disabled='speedDisabled'>+100ms</van-button>
-			 	<van-button type="default" @click="resTime"  :disabled='speedDisabled'>-100ms</van-button>
-			 </div>
-			 
-			 <div class="btns-box">分数：
-			     <van-button type="default" >{{score}}分</van-button>
-			     <van-button type="danger" @click="clearCount">重来</van-button>
-			 </div>
-      	 </div>
+      	<router-view v-if="isRouterAlive">
+      	
+      		<div class="time-box">
+	        	<span>{{minute}}</span>:<span>{{second}}</span>
+	        </div>
+			 <canvas class="myCanvas"  ref="myCanvas"  
+			 	@touchstart="canvasStart($event)"
+	      		@touchend="canvasEnd($event)"
+	      	></canvas>
+	      	 <div class="page-actions">
+	      	 	
+				 <div class="btns-box">操作：
+				     <van-button type="warning" @click="stopTimer">停止</van-button>
+				     <van-button type="info" @click="actionTimer">{{startText}}</van-button>
+				 </div>
+		      	
+				 <div class="btns-box">速度：
+				 	<van-button type="default" @click="addTime" :disabled='speedDisabled'>+100ms</van-button>
+				 	<van-button type="default" @click="resTime"  :disabled='speedDisabled'>-100ms</van-button>
+				 </div>
+				 
+				 <div class="btns-box">分数：
+				     <van-button type="default" >{{score}}分</van-button>
+				     <!--<van-button type="danger" @click="clearCount" :disabled='speedDisabled'>重来</van-button>-->
+				 </div>
+	      	 </div>
+      	</router-view>
 		 
 	</div>
   <script>
@@ -86,7 +92,7 @@
            cxt:'',
            minute:"00",
            second:"30",
-           startSecond:"29",
+           startSecond:"6",
            countDown:'',
            finallysecond:5,
            speedDisabled:false,
@@ -94,22 +100,35 @@
            pointWith:5,
            canPoint:true,
            isStart:true,
+           isRouterAlive:true,
+           startText:"开始"
+        },
+        provide(){
+        	return {
+        		reload:this.reload
+        	}
         },
         mounted(){
-        	setTimeout(() => {
-        		canvas = this.$refs.myCanvas;
-        		this.CW= document.documentElement.clientWidth;
-        		canvas.width = this.CW;
-	            canvas.height = this.CH;
-	            this.cxt = canvas.getContext("2d");
-	             //两个圆之间的外距离 就是说两个圆心的距离去除两个半径
-	            var X = (this.CW - 2 * this.OffsetX - this.R * 2 * 3) / 2;
-	            var Y = (this.CH - 2 * this.OffsetY - this.R * 2 * 3) / 2;
-	            this.PointLocationArr = this.CaculateNinePointLotion(X, Y);
-             	this.Draw(this.cxt,this.PointLocationArr,this.LinePoint,null);
-        	},10)
+        	
+        		this._Init();
+        	
         },
         methods: {
+           _Init(){
+           		setTimeout(() => {
+	           		canvas = this.$refs.myCanvas;
+	        		this.CW= document.documentElement.clientWidth;
+	        		
+	        		canvas.width = this.CW;
+		            canvas.height = this.CH;
+		            this.cxt = canvas.getContext("2d");
+		             //两个圆之间的外距离 就是说两个圆心的距离去除两个半径
+		            var X = (this.CW - 2 * this.OffsetX - this.R * 2 * 3) / 2;
+		            var Y = (this.CH - 2 * this.OffsetY - this.R * 2 * 3) / 2;
+		            this.PointLocationArr = this.CaculateNinePointLotion(X, Y);
+		           this.Draw(this.cxt,this.PointLocationArr,this.LinePoint,null);
+	            },10)
+           },
            Draw(cxt, _PointLocationArr, _LinePointArr,_selectPointArr) {
              for (var i = 0; i < _PointLocationArr.length; i++) {
                  var Point = _PointLocationArr[i];
@@ -138,8 +157,6 @@
                  }
                  if(_selectPointArr) {
                  	if(_selectPointArr.indexOf(i)>=0){
-                 		console.log(this.pointColor)
-                 		console.log(this.pointWidth)
                  		 cxt.fillStyle = this.pointColor;
 	                     cxt.fillStyle = grd;
 		                 cxt.beginPath();
@@ -213,6 +230,8 @@
 	        },
 	        actionTimer() {
 	        	if(!this.isStart) return;
+	        	this.score = 0;
+	           	this.second = "00"
 	        	this.RandLinePoint(this.cxt,this.PointLocationArr,this.time,this.len)
 	        	this.speedDisabled = true
 	        	this.canPoint = true
@@ -225,7 +244,7 @@
 	        	this.time +=100;//减速
             },
         	canvasStart(event){
-        		//if(!this.canPoint)return;
+        		if(!this.canPoint)return;
         		this.IsPointSelect(event.touches[0]);
         	},
         	canvasMove(event){
@@ -252,11 +271,19 @@
                 this.selectPoint=[];
                 
         	},
-        	//清空分数
+        	//重来
         	clearCount() {
-        		clearInterval(this.timer);
-        		clearInterval(this.countDownTimer);
-	        	this.score = 0;
+        		this.isRouterAlive = false;
+	           	this.$nextTick(function(){
+	           		this.isRouterAlive = true
+	           	})
+	           	this.canPoint = false;
+	           	this.LinePoint=[];
+	           	this.selectPoint=[]
+	           	this.score = 0;
+	           	this.second = "00"
+	           	this._Init();
+	           	this.RandLinePoint(this.cxt,this.PointLocationArr,this.time,this.len)
         	},
         	//倒计时
 		  	_CountDown(flag){
@@ -269,6 +296,9 @@
 		      			clearInterval(this.countDownTimer);
 		      			clearInterval(this.timer)
 		      			this.speedDisabled = false
+		      			this.isStart = true;
+		      			this.canPoint = true;
+		      			this.startText="再来一次"
 		      		}
 		      		else{
 		      			second--;
