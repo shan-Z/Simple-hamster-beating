@@ -60,9 +60,9 @@
 				     <van-button type="info" @click="actionTimer">{{startText}}</van-button>
 				 </div>
 		      	
-				 <div class="btns-box">速度：
-				 	<van-button type="default" @click="addTime" :disabled='speedDisabled'>+100ms</van-button>
-				 	<van-button type="default" @click="resTime"  :disabled='speedDisabled'>-100ms</van-button>
+				 <div class="btns-box">级别：
+				 	<van-button type="default" @click="addTime" :disabled='speedDisabled'>+级别</van-button>
+				 	<van-button type="default" @click="resTime"  :disabled='speedDisabled'>-级别</van-button>
 				 </div>
 				 
 				 <div class="btns-box">分数：
@@ -77,7 +77,7 @@
   	var vm = new Vue({
         el: '#app',
         data: {
-           time:300,
+           time:800,
            score:0,
            len:9,
            OffsetX:30,
