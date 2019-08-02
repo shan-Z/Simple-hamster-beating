@@ -33,26 +33,37 @@
          }
          .btns-box{
          	text-align: center;
-         	margin-bottom:20px;
+         	margin-bottom:15px;
          }
          .van-button{
          	width:100px;
          }
+         header{
+         	margin-top:-20px;
+         	margin-bottom:10px;
+         	font-size: 24px;
+         	font-weight: 400;
+         	text-align: center;
+         }
+         .myCanvas{margin-top:-15px;}
      </style>
      
  </head>
  <body>
 	<div id="app" class="page">
 		 
-      	<router-view v-if="isRouterAlive">	
+      	<router-view v-if="isRouterAlive">
       		<div class="time-box">
-	        	<span>{{minute}}</span>:<span>{{second}}</span>
+	        	<span>{{minute}}</span>:<span>{{second}}</span> 
 	        </div>
 			 <canvas class="myCanvas"  ref="myCanvas"  
 			 	@touchstart="canvasStart($event)"
 	      		@touchend="canvasEnd($event)"
 	      	></canvas>
+	      	
+      		<header>简易打地鼠游戏</header>
 	      	 <div class="page-actions">
+	      	 	
 				 <div class="btns-box">操作：
 				     <van-button type="warning" @click="stopTimer">停止</van-button>
 				     <van-button type="info" @click="actionTimer">{{startText}}</van-button>
@@ -125,6 +136,7 @@
 		            var Y = (this.CH - 2 * this.OffsetY - this.R * 2 * 3) / 2;
 		            this.PointLocationArr = this.CaculateNinePointLotion(X, Y);
 		           this.Draw(this.cxt,this.PointLocationArr,this.LinePoint,null);
+		           
 	            },10)
            },
            Draw(cxt, _PointLocationArr, _LinePointArr,_selectPointArr) {
