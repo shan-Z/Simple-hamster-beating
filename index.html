@@ -110,7 +110,9 @@
            canPoint:true,
            isStart:true,
            isRouterAlive:true,
-           startText:"开始"
+           startText:"开始",
+           wincount:0,
+           pointcount:0,
         },
         provide(){
         	return {
@@ -154,16 +156,12 @@
                  cxt.fill();
                  if(_LinePointArr.indexOf(i)>=0)
                  {
-                    
-                     
 		                 cxt.fillStyle = "red";
 	                     cxt.beginPath();
 	                     cxt.arc(Point.X, Point.Y, this.R -16, 0, Math.PI * 2, true);
 	                     cxt.closePath();
 	                     cxt.fill();
-	                     
-                     
-                     
+	                     this.pointcount ++;
                  }
                  if(_selectPointArr) {
                  	if(_selectPointArr.indexOf(i)>=0){
@@ -187,6 +185,8 @@
 	                     cxt.arc(Point.X, Point.Y, this.R-5 , 0, Math.PI * 2, true);
 	                     cxt.closePath();
 	                     cxt.fill();
+	                     this.wincount ++;
+	                     
                      }
  				}
              }
@@ -269,7 +269,6 @@
         		this.Draw(this.cxt,this.PointLocationArr,this.LinePoint,this.selectPoint);
         		console.log(this.LinePoint+","+this.selectPoint)
                 if(this.selectPoint.length>0 && this.selectPoint[0] == this.LinePoint[0]){
-                	this.score ++;
                 	this.pointColor = "red"
                 	this.pointWidth = 5;
                 }
@@ -291,6 +290,8 @@
 	           	this.LinePoint=[];
 	           	this.selectPoint=[]
 	           	this.score = 0;
+      			this.wincount=0;
+      			this.pointcount=0;
 	           	this.second = "00"
 	           	this._Init();
 	           	this.RandLinePoint(this.cxt,this.PointLocationArr,this.time,this.len)
@@ -303,12 +304,7 @@
 		  		let minute = parseInt(this.minute);
 		      	this.countDownTimer = setInterval(() => {
 		      		if(second == 0){
-		      			clearInterval(this.countDownTimer);
-		      			clearInterval(this.timer)
-		      			this.speedDisabled = false
-		      			this.isStart = true;
-		      			this.canPoint = true;
-		      			this.startText="再来一次"
+		      			this._Result();
 		      		}
 		      		else{
 		      			second--;
@@ -319,6 +315,16 @@
 		      		}	
 		      	},1000)
 		  	},
+		  	//结束
+		  	_Result(){
+		  		clearInterval(this.countDownTimer);
+      			clearInterval(this.timer)
+      			this.speedDisabled = false
+      			this.isStart = true;
+      			this.canPoint = true;
+      			this.startText="再来一次"
+      			this.score = parseInt((this.wincount / this.pointcount)*100);
+		  	}
         }
     })
   
